@@ -1065,6 +1065,7 @@ int bsc_vty_init_extra(void)
 	install_element_ve(&show_stats_cmd);
 	install_element_ve(&show_smsqueue_cmd);
 	install_element_ve(&logging_fltr_imsi_cmd);
+	install_element_ve(&sup_ussd_destination_cmd);
 
 	install_element(ENABLE_NODE, &ena_subscr_delete_cmd);
 	install_element(ENABLE_NODE, &ena_subscr_name_cmd);

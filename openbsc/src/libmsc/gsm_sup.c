@@ -50,12 +50,15 @@ static int subscr_uss_message(struct msgb *msg,
 	gsup_indicator[1] = req->message_type;
 	/* TODO ADD tid */
 	gsup_indicator[2] = req->component_type;
+	gsup_indicator[3] = req->transaction_id;
 
 	/* invokeId */
 	msgb_tlv_put(msg, GSM0480_COMPIDTAG_INVOKE_ID, 1, &req->invoke_id);
 
 	/* opCode */
-	msgb_tlv_put(msg, GSM0480_OPERATION_CODE, 1, &req->opcode);
+	if (req->opcode != 0) {
+		msgb_tlv_put(msg, GSM0480_OPERATION_CODE, 1, &req->opcode);
+	}
 
 	if (req->ussd_text_len > 0) {
 		//msgb_tlv_put(msg, ASN1_OCTET_STRING_TAG, 1, &req->ussd_text_language);
@@ -108,7 +111,8 @@ static int rx_uss_message_parse(struct ss_request *ss,
 	/* skip GPRS_GSUP_MSGT_MAP */
 	ss->message_type = *(++const_data);
 	ss->component_type = *(++const_data);
-	const_data += 2;
+	ss->transaction_id = *(++const_data);
+	const_data += 1;
 
 	//
 	if (*const_data != GSM0480_COMPIDTAG_INVOKE_ID) {
